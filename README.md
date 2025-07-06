@@ -14,12 +14,6 @@ Browser support
 - Safari 16.4 (released March 2023)
 - Not supported on iOS 16.4 jailbroken version.
 
-## **Online**
-
-You can access the online zashboard at the following link:
-
-- [Online zashboard](http://board.zash.run.place)
-
 ## **Download**
 
 For **Mihomo** users:
@@ -27,22 +21,9 @@ The **Upgrade Dashboard** function utilizes the API from Mihomo core. Ensure you
 
 You can download the zashboard files here:
 
-release:
-
-- [dist.zip (7.7MB)](https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip) – Includes better font-loading experience.
-- [dist-cdn-fonts.zip (1.3MB)](https://github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip) – Optimized for devices with limited storage.
-
 dev:
 
-- [gh-pages.zip (7.7MB)](https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip)
-
-## **Docker Setup**
-
-To run zashboard via Docker, use the following command:
-
-```
-docker run -d -p 80:80 ghcr.io/zephyruso/zashboard:latest
-```
+- [gh-pages.zip](https://github.com/d2184/zashboard/archive/refs/heads/gh-pages.zip)
 
 ## Tips
 
