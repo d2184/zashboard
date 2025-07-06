@@ -93,14 +93,14 @@ const subscriptionInfo = computed(() => {
 
     const { t } = useI18n()
     const total = prettyBytesHelper(Total, { binary: true })
-    const used = prettyBytesHelper(Download + Upload, { binary: true })
-    const percentage = toFinite((((Download + Upload) / Total) * 100).toFixed(2))
+    const unused = prettyBytesHelper(Total - Download - Upload, { binary: true })
+    const percentage = toFinite((((Total - Download - Upload) / Total) * 100).toFixed(2))
     const expireStr =
       Expire === 0
         ? `${t('expire')}: ${t('noExpire')}`
         : `${t('expire')}: ${dayjs(Expire * 1000).format('YYYY-MM-DD')}`
 
-    const usageStr = `${used} / ${total} ( ${percentage}% )`
+    const usageStr = `${unused} / ${total} ( ${percentage}% )`
 
     return {
       expireStr,
