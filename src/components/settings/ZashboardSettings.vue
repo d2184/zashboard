@@ -14,7 +14,7 @@
           <span class="bg-secondary h-2 w-2 rounded-full"></span>
         </span>
         <a
-          href="https://github.com/Zephyruso/zashboard"
+          href="https://github.com/d2184/zashboard"
           target="_blank"
         >
           <span> zashboard </span>
