@@ -14,12 +14,13 @@ export const logs = shallowRef<LogWithSeq[]>([])
 export const isPaused = ref(false)
 export const logLevel = useStorage<string>('config/log-level', LOG_LEVEL.Info)
 
-// 各内核认的 /logs?level= 取值不同(mihomo 无 trace,honk 无 silent),
+// 各内核认的 /logs?level= 取值不同(mihomo 无 trace,honk 无 fatal/panic/silent),
 // 传了不认的级别会被直接 400,WS 随后陷入无限重连,所以逐档按能力表拼。
 export const supportedLogLevels = computed(() => {
   const levels = [LOG_LEVEL.Debug, LOG_LEVEL.Info, LOG_LEVEL.Warning, LOG_LEVEL.Error]
 
   if (can('traceLogLevel')) levels.unshift(LOG_LEVEL.Trace)
+  if (can('extraLogLevels')) levels.push(LOG_LEVEL.Fatal, LOG_LEVEL.Panic)
   if (can('silentLogLevel')) levels.push(LOG_LEVEL.Silent)
 
   return levels

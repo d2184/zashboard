@@ -6,9 +6,10 @@
 //   core —— 运行时内核品牌。靠 /version 字符串嗅探得来,是启发式猜测,
 //           可能误判(分支核 / 兼容核),且拉取完成前为 'unknown'。
 //
-// 连接通道只剩 Clash REST/WS 一条,其上实际在用的 API 形态有两种:
-//   A. core=mihomo  mihomo 的 Clash API
-//   B. core=honk    honk 的 Clash 兼容 API(端点子集)
+// 连接通道只剩 Clash REST/WS 一条,其上实际在用的 API 形态有三种:
+//   A. core=mihomo   mihomo 的 Clash API
+//   B. core=singbox  sing-box 的 Clash 兼容 API(端点子集 + 少量专属端点)
+//   C. core=honk     honk 的 Clash 兼容 API(端点子集)
 //
 // 能力表只剩由 core 决定的这一张,一律通过 can() 读取。因探测是启发式,允许用户用
 // displayAllFeatures 强制掰开(提示文案承诺:fork 版内核可能支持官方版没有的功能)。
@@ -28,6 +29,7 @@ import { computed, ref } from 'vue'
 
 export enum Core {
   Mihomo = 'mihomo',
+  Singbox = 'singbox',
   Honk = 'honk',
   Unknown = 'unknown',
 }
@@ -40,10 +42,12 @@ export const resetCore = () => {
   core.value = Core.Unknown
 }
 
-// displayAllFeatures 的适用范围:跑着非 mihomo 内核(honk)时。
+// displayAllFeatures 的适用范围:跑着非 mihomo 内核(sing-box / honk)时。
 // 该开关的语义是「我用的 fork 版内核也支持这些 mihomo 扩展端点,先显示出来」。
 // core 未探测出结论(Unknown)时不掰,免得凭空点亮一堆按钮。
-const isNonMihomoCore = computed(() => core.value === Core.Honk)
+const isNonMihomoCore = computed(
+  () => core.value === Core.Singbox || core.value === Core.Honk,
+)
 
 const isForkCoreOverride = computed(() => isNonMihomoCore.value && displayAllFeatures.value)
 
@@ -51,6 +55,7 @@ const isForkCoreOverride = computed(() => isNonMihomoCore.value && displayAllFea
 export const showDisplayAllFeatures = computed(() => !!activeBackend.value && isNonMihomoCore.value)
 
 const soft = computed(() => {
+  const singbox = core.value === Core.Singbox
   const mihomo = core.value === Core.Mihomo
   const honk = core.value === Core.Honk
   const mihomoOrForkCore = mihomo || isForkCoreOverride.value
@@ -71,13 +76,27 @@ const soft = computed(() => {
     // ports / tun / allow-lan 等 PATCH /configs 配置块。
     configPatch: mihomo,
 
+    // ---------- sing-box 内核侧 ----------
+    // 自定义全局节点
+    customGlobalNode: singbox,
+    // sing-box 日志 payload 带 "[type]:" 前缀,可据此做类型分面过滤
+    logTypeFilter: singbox,
+    // sing-box 日志以 "[连接id 耗时]" 开头,可据此从日志跳到对应连接
+    logConnectionDetail: singbox,
+    // sing-box 切换模式后需要主动断开命中 clash_mode 规则的连接
+    disconnectOnModeChange: singbox,
+    // 面板自升级。mihomo 与 sing-box 的 Clash 兼容 API 都提供,honk 没有
+    dashboardUpgrade: mihomo || singbox,
+
     // ---------- 日志级别集合 ----------
     // /logs?level= 传了内核不认的级别会被 400 掉,WS 随后陷入无限重连,
     // 所以按内核各自支持的取值逐档点亮,拼装见 assembly/logs。
-    // trace:honk 有,mihomo 没有
-    traceLogLevel: honk,
-    // silent:mihomo 有,honk 没有
-    silentLogLevel: mihomo,
+    // trace:sing-box 与 honk 有,mihomo 没有
+    traceLogLevel: singbox || honk,
+    // fatal / panic:仅 sing-box
+    extraLogLevels: singbox,
+    // silent:mihomo 与 sing-box 有,honk 没有
+    silentLogLevel: mihomo || singbox,
 
     // ---------- honk 内核侧 ----------
     // GET /stats:honk 独有的用户态运行时快照。方向与上面那批相反,

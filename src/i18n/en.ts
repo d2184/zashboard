@@ -289,6 +289,7 @@ const en = {
   showLog: 'Show log',
   hideLogRegex: 'Hide log regex',
   hideLogTip: 'You can use case-insensitive regular expressions to match and hide unwanted logs.',
+  sameConnectionLogs: 'Logs of the same connection',
   loadBalance: 'Load balancing',
   label: 'Label',
   optional: 'Optional',
@@ -368,6 +369,7 @@ const en = {
   autoDisconnectIdleUDPTime: 'UDP idle time',
   autoDisconnectIdleUDPTip:
     "When enabled, opening zashboard will close UDP connections that have been idle longer than the configured time. This can help with UDP connections that don't disconnect automatically.",
+  customGlobalNode: 'Custom global node',
   connectionTopology: 'Connection topology',
   applyConnectionFilter: 'Apply connection filters',
   topologyPause: 'Pause topology updates',

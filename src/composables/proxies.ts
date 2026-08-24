@@ -1,3 +1,4 @@
+import { can } from '@/assembly/backend'
 import { configs } from '@/assembly/config'
 import {
   getProxyGroupChains,
@@ -9,7 +10,7 @@ import {
 import { GLOBAL, PROXY_TAB_TYPE } from '@/constant'
 import { isHiddenGroup } from '@/helper'
 import { groupsInActiveFolder, isProxyFolderModeActive } from '@/store/proxyFolders'
-import { displayGlobalByMode, manageHiddenGroup } from '@/store/settings'
+import { customGlobalNode, displayGlobalByMode, manageHiddenGroup } from '@/store/settings'
 import { isEmpty } from 'lodash'
 import { computed, ref } from 'vue'
 import {
@@ -43,7 +44,12 @@ const getRenderProxyGroups = () => {
 
   if (displayGlobalByMode.value) {
     if (configs.value?.mode.toUpperCase() === GLOBAL) {
-      return filterProxyGroups(getProxyGroupChains(GLOBAL), false)
+      const globalName =
+        can('customGlobalNode') && proxyMap.value[customGlobalNode.value]
+          ? customGlobalNode.value
+          : GLOBAL
+
+      return filterProxyGroups(getProxyGroupChains(globalName), false)
     }
 
     return filterProxyGroups(proxyGroupList.value)
