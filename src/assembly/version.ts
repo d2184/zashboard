@@ -4,6 +4,7 @@
 import { fetchClashVersion, restartCoreAPI, upgradeCoreAPI, upgradeUIAPI } from '@/api/clash'
 import HonkLogo from '@/assets/images/honk.svg'
 import MetacubexLogo from '@/assets/images/metacubex.jpg'
+import SingBoxLogo from '@/assets/images/sing-box.svg'
 import { MIHOMO, MIHOMO_CHANNEL } from '@/constant'
 import { getRequestErrorMessage } from '@/helper/requestError'
 import { autoUpgradeCore, autoUpgradeDashboard, checkUpgradeCore } from '@/store/settings'
@@ -29,8 +30,10 @@ export type BackendProbe = {
 export const backendProbe = ref<BackendProbe | undefined>()
 
 // honk 的 /version 返回 "honk <semver>"(见 honk-core/src/clash_api.rs 的 version handler)。
+// sing-box 的 Clash 兼容 API /version 返回带 "sing-box" 字样的版本串。
 const detectCore = (versionString: string): Core => {
   if (!versionString) return Core.Unknown
+  if (versionString.includes('sing-box')) return Core.Singbox
   if (/\bhonk\b/i.test(versionString)) return Core.Honk
   return Core.Mihomo
 }
@@ -38,6 +41,8 @@ const detectCore = (versionString: string): Core => {
 // 内核品牌的展示信息(logo / 官网链接)。纯展示,不是能力门控,故允许 view 使用。
 export const coreBrand = computed(() => {
   switch (core.value) {
+    case Core.Singbox:
+      return { logo: SingBoxLogo, url: 'https://github.com/sagernet/sing-box' }
     case Core.Honk:
       return { logo: HonkLogo, url: 'https://github.com/Glassyiris/honk' }
     default:

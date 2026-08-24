@@ -24,10 +24,6 @@ You can access the online zashboard at the following link:
 
 You can download the zashboard files here:
 
-> [!WARNING]
-> Support for sing-box has been removed. [Learn more about this
-> decision](./docs/sing-box-deprecation.md).
-
 release:
 
 - [dist.zip (7.81 MB)](https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip) – Includes better font-loading experience.

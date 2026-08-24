@@ -281,6 +281,7 @@ const zh: LANG_MESSAGE = {
   showLog: '显示日志',
   hideLogRegex: '隐藏日志正则',
   hideLogTip: '可通过不区分大小写的正则表达式来匹配并隐藏不需要看到的日志',
+  sameConnectionLogs: '同连接日志',
   loadBalance: '负载均衡',
   label: '标签',
   optional: '可选',
@@ -353,6 +354,7 @@ const zh: LANG_MESSAGE = {
   autoDisconnectIdleUDPTime: 'UDP空闲时间',
   autoDisconnectIdleUDPTip:
     '启用后，打开zashboard时将关闭持续时间超过配置分钟数的UDP连接，这可能对某些无法正常自动断开的UDP连接带来帮助。(这是作者自己的私货，你大概率不需要打开它)',
+  customGlobalNode: '自定义全局节点',
   connectionTopology: '连接拓扑',
   applyConnectionFilter: '应用连接筛选',
   topologyPause: '暂停拓扑更新',

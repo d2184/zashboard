@@ -281,6 +281,7 @@ const zhTW: LANG_MESSAGE = {
   showLog: '顯示日誌',
   hideLogRegex: '隱藏日誌正則',
   hideLogTip: '可通過不區分大小寫的正則表達式來匹配並隱藏不需要看到的日誌',
+  sameConnectionLogs: '同連線日誌',
   loadBalance: '負載均衡',
   label: '標籤',
   optional: '可選',
@@ -353,6 +354,7 @@ const zhTW: LANG_MESSAGE = {
   autoDisconnectIdleUDPTime: 'UDP空閒時間',
   autoDisconnectIdleUDPTip:
     '啟用後，開啟zashboard時將關閉持續時間超過配置分鐘數的UDP連接，這可能對某些無法正常自動斷開的UDP連接帶來幫助。(這是作者自己的私貨，你大概率不需要開啟它)',
+  customGlobalNode: '自訂全域節點',
   connectionTopology: '連接拓撲',
   applyConnectionFilter: '套用連接篩選',
   topologyPause: '暫停拓撲更新',
