@@ -6,6 +6,7 @@
         v-if="showDashboardUpgrade"
         :setting-key="k.actions"
         :anchor-key="`${k.actions}.upgradeDashboard`"
+        :when="can('dashboardUpgrade')"
       >
         <div class="setting-item-label">{{ $t('upgradeDashboard') }}</div>
         <button
@@ -23,6 +24,7 @@
       <SettingItem
         v-if="showDashboardUpgrade"
         :setting-key="k.autoUpgradeDashboard"
+        :when="can('dashboardUpgrade')"
       >
         <div class="setting-item-label">{{ $t('autoUpgradeDashboard') }}</div>
         <input
@@ -182,7 +184,7 @@
           {{ $t('displayAllFeatures') }}
           <QuestionMarkCircleIcon
             class="h-4 w-4 cursor-pointer"
-            @mouseenter="showTip($event, $t('displayAllFeaturesTip'))"
+            @mouseenter="showTip($event, $t('displayAllFeaturesTip', { core: currentCore }))"
           />
         </div>
         <input
@@ -196,7 +198,7 @@
 </template>
 
 <script setup lang="ts">
-import { can, showDisplayAllFeatures } from '@/assembly/backend'
+import { can, currentCore, showDisplayAllFeatures } from '@/assembly/backend'
 import { upgradeUI } from '@/assembly/version'
 import DashboardSettings from '@/components/common/DashboardSettings.vue'
 import SelectInput from '@/components/common/SelectInput.vue'

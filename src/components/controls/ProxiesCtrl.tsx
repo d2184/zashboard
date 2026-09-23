@@ -1,5 +1,6 @@
 import { can } from '@/assembly/backend'
 import { configs, updateConfigs } from '@/assembly/config'
+import { activeConnections, disconnectById } from '@/assembly/connections'
 import {
   allProxiesLatencyTest,
   fetchProxies,
@@ -93,6 +94,13 @@ export default defineComponent({
 
     const handlerModeChange = (mode: string) => {
       updateConfigs({ mode })
+      if (can('disconnectOnModeChange') && automaticDisconnection.value) {
+        activeConnections.value.forEach((connection) => {
+          if (connection.rule.includes('clash_mode')) {
+            disconnectById(connection.id)
+          }
+        })
+      }
     }
 
     const handlerClickLatencyTestAll = async () => {
@@ -164,7 +172,7 @@ export default defineComponent({
             <ArrowPathIcon class={['h-4 w-4', isUpgrading.value && 'animate-spin']} />
           </button>
         )
-      const modeSelect = configs.value && can('configPatch') && (
+      const modeSelect = configs.value && can('modeSwitch') && (
         <SelectInput
           class={['select select-sm', isLargeCtrlsBar.value ? 'min-w-40' : 'min-w-24']}
           modelValue={configs.value.mode}
