@@ -151,6 +151,20 @@
             v-model="displayGlobalByMode"
           />
         </SettingItem>
+        <SettingItem
+          :setting-key="k.customGlobalNode"
+          :when="displayGlobalByMode && can('customGlobalNode')"
+          class="settings-dependent-item"
+        >
+          <div class="setting-item-label">
+            {{ $t('customGlobalNode') }}
+          </div>
+          <SelectInput
+            class="select select-sm w-32"
+            v-model="customGlobalNode"
+            :options="Object.keys(proxyMap).map((value) => ({ value, label: value }))"
+          />
+        </SettingItem>
         <SettingItem :setting-key="k.proxyPreviewType">
           <div class="setting-item-label">
             {{ $t('proxyPreviewType') }}
@@ -212,6 +226,7 @@
 
 <script setup lang="ts">
 import { can } from '@/assembly/backend'
+import { proxyMap } from '@/assembly/proxies'
 import SelectInput from '@/components/common/SelectInput.vue'
 import SettingItem from '@/components/settings/SettingItem.vue'
 import { useIsSettingVisible } from '@/composables/use-setting-visibility'
@@ -220,6 +235,7 @@ import { FOLDER_MODE, PROXY_CARD_SIZE, PROXY_PREVIEW_TYPE, SPEEDTEST_MODE } from
 import { useTooltip } from '@/composables/use-tooltip'
 import { getMinCardWidth } from '@/helper/utils'
 import {
+  customGlobalNode,
   displayGlobalByMode,
   independentLatencyTest,
   IPv6test,
@@ -257,6 +273,7 @@ const isVisibleTwoColumnProxyGroup = useIsSettingVisible(k.twoColumnProxyGroup)
 const isVisibleProxyFolderMode = useIsSettingVisible(k.proxyFolderMode)
 const isVisibleTruncateProxyName = useIsSettingVisible(k.truncateProxyName)
 const isVisibleDisplayGlobalByMode = useIsSettingVisible(k.displayGlobalByMode)
+const isVisibleCustomGlobalNode = useIsSettingVisible(k.customGlobalNode)
 const isVisibleProxyPreviewType = useIsSettingVisible(k.proxyPreviewType)
 const isVisibleProxyCardSize = useIsSettingVisible(k.proxyCardSize)
 const isVisibleProxyGroupIconSize = useIsSettingVisible(k.proxyGroupIconSize)
@@ -295,6 +312,7 @@ const hasVisibleProxyStyleItems = computed(() => {
     isVisibleProxyFolderMode.value ||
     isVisibleTruncateProxyName.value ||
     isVisibleDisplayGlobalByMode.value ||
+    (displayGlobalByMode.value && can('customGlobalNode') && isVisibleCustomGlobalNode.value) ||
     isVisibleProxyPreviewType.value ||
     isVisibleProxyCardSize.value
   )

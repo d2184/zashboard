@@ -6,6 +6,7 @@
         v-if="showDashboardUpgrade"
         :setting-key="k.actions"
         :anchor-key="`${k.actions}.upgradeDashboard`"
+        :when="can('dashboardUpgrade')"
       >
         <div class="setting-item-label">{{ $t('upgradeDashboard') }}</div>
         <button
@@ -23,6 +24,7 @@
       <SettingItem
         v-if="showDashboardUpgrade"
         :setting-key="k.autoUpgradeDashboard"
+        :when="can('dashboardUpgrade')"
       >
         <div class="setting-item-label">{{ $t('autoUpgradeDashboard') }}</div>
         <input

@@ -5,6 +5,7 @@ import { daeCapabilities } from './capabilities'
 
 export enum Core {
   Mihomo = 'mihomo',
+  Singbox = 'singbox',
   Honk = 'honk',
   Dae = 'dae',
   Unknown = 'unknown',
@@ -17,7 +18,9 @@ export const resetCore = () => {
 }
 
 const isNonMihomoCore = computed(
-  () => core.value === Core.Honk && activeBackend.value?.type !== 'dae',
+  () =>
+    (core.value === Core.Singbox || core.value === Core.Honk) &&
+    activeBackend.value?.type !== 'dae',
 )
 
 const isForkCoreOverride = computed(() => isNonMihomoCore.value && displayAllFeatures.value)
@@ -35,7 +38,13 @@ export type Cap =
   | 'independentLatency'
   | 'coreUpdateCheck'
   | 'configPatch'
+  | 'modeSwitch'
+  | 'customGlobalNode'
+  | 'logTypeFilter'
+  | 'logConnectionDetail'
+  | 'disconnectOnModeChange'
   | 'traceLogLevel'
+  | 'extraLogLevels'
   | 'silentLogLevel'
   | 'runtimeStats'
   | 'latencyTest'
@@ -66,6 +75,7 @@ export type Cap =
 type Caps = Partial<Record<Cap, boolean>>
 
 const clashCaps = computed<Caps>(() => {
+  const singbox = core.value === Core.Singbox
   const mihomo = core.value === Core.Mihomo
   const honk = core.value === Core.Honk
   const mihomoOrForkCore = mihomo || isForkCoreOverride.value
@@ -73,7 +83,7 @@ const clashCaps = computed<Caps>(() => {
   return {
     coreUpgrade: mihomoOrForkCore,
     coreRestart: mihomoOrForkCore,
-    dashboardUpgrade: mihomoOrForkCore,
+    dashboardUpgrade: mihomoOrForkCore || singbox,
     reloadConfigs: mihomoOrForkCore,
     updateConfigs: mihomoOrForkCore,
     updateGeoDatabase: mihomoOrForkCore,
@@ -81,9 +91,16 @@ const clashCaps = computed<Caps>(() => {
     independentLatency: mihomoOrForkCore,
     coreUpdateCheck: mihomo,
     configPatch: mihomo,
+    modeSwitch: mihomo || singbox,
 
-    traceLogLevel: honk,
-    silentLogLevel: mihomo,
+    customGlobalNode: singbox,
+    logTypeFilter: singbox,
+    logConnectionDetail: singbox,
+    disconnectOnModeChange: singbox,
+
+    traceLogLevel: singbox || honk,
+    extraLogLevels: singbox,
+    silentLogLevel: mihomo || singbox,
 
     runtimeStats: honk,
 
